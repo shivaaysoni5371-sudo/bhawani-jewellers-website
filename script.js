@@ -20,6 +20,8 @@ const uploadStatus = document.querySelector("#upload-status");
 
 const ADMIN_USERNAME_HASH = "4e129f4bb55341b97b18ec28aa6321140f5a88a563e4cf93de9d57c0aeb0fd4c";
 const ADMIN_PASSWORD_HASH = "a208b545295701f87f4cf5100b7a99c05c426c91a359a4abe7ff2e09b4d9004f";
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "Bhawani@2026";
 
 const defaultCategories = ["Bridal Sets", "Gold Bangles", "Diamond Rings", "Temple Jewellery"];
 const defaultPrices = {
@@ -159,6 +161,11 @@ const renderPrices = () => {
     ["10 gram 24K", gold24 * 10, "Auto-calculated from 24K per gram"],
     ["1 tola 22K", gold22 * tolaInGrams, "1 tola = 11.664 gram"],
     ["1 gram silver", silver, "Silver rate for Sindhari"],
+  priceUpdated.textContent = `Updated: ${prices.updatedAt}`;
+  priceGrid.innerHTML = [
+    ["22K Gold", prices.gold22, "Most popular for jewellery"],
+    ["24K Gold", prices.gold24, "Pure gold reference rate"],
+    ["Silver", prices.silver, "Silver rate for Sindhari"],
   ]
     .map(
       ([label, value, helpText]) => `
@@ -166,6 +173,8 @@ const renderPrices = () => {
           <span>${label}</span>
           <strong>${formatCurrency(value)}</strong>
           <small>${helpText}</small>
+          <strong>₹${Number(value).toLocaleString("en-IN")}</strong>
+          <small>${helpText} • per gram</small>
         </article>
       `,
     )
@@ -259,12 +268,14 @@ contactMessageForm?.addEventListener("submit", (event) => {
 });
 
 adminLoginForm?.addEventListener("submit", async (event) => {
+adminLoginForm?.addEventListener("submit", (event) => {
   event.preventDefault();
   const formData = new FormData(adminLoginForm);
   const username = formData.get("username");
   const password = formData.get("password");
   const [usernameHash, passwordHash] = await Promise.all([hashText(username), hashText(password)]);
   const isAdmin = usernameHash === ADMIN_USERNAME_HASH && passwordHash === ADMIN_PASSWORD_HASH;
+  const isAdmin = username === ADMIN_USERNAME && password === ADMIN_PASSWORD;
 
   adminLoginStatus.textContent = isAdmin
     ? "Login successful. Admin features are now available."

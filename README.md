@@ -46,5 +46,13 @@ http://127.0.0.1:4173/
 ## Demo admin panel
 
 The static demo admin panel uses browser-only storage for preview purposes. Admin credentials are not printed on the public page or in this README.
+## Demo admin login
+
+The static demo admin panel uses browser-only storage for preview purposes.
+
+```text
+Username: admin
+Password: Bhawani@2026
+```
 
 For a production website, move admin authentication, image uploads, and gold-price updates to a secure backend/database.
