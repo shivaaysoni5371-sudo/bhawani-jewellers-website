@@ -46,6 +46,8 @@ http://127.0.0.1:4173/
 ## Demo admin panel
 
 The static demo admin panel uses browser-only storage for preview purposes. Admin credentials are not printed on the public page or in this README.
+codex/design-website-for-jewellery-store-bkhjok
+=======
 ## Demo admin login
 
 The static demo admin panel uses browser-only storage for preview purposes.
@@ -54,5 +56,6 @@ The static demo admin panel uses browser-only storage for preview purposes.
 Username: Sawai_soni066
 Password: Sawai6367@8444
 ```
+main
 
 For a production website, move admin authentication, image uploads, and gold-price updates to a secure backend/database.

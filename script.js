@@ -28,13 +28,18 @@ const staffList = document.querySelector("#staff-list");
 const adminUserForm = document.querySelector("#admin-user-form");
 const adminUserList = document.querySelector("#admin-user-list");
 
+codex/design-website-for-jewellery-store-bkhjok
+const ADMIN_USERNAME_HASH = "5108473c";
+const ADMIN_PASSWORD_HASH = "00f2996d";
+const tabPanelIds = ["gold-prices", "gallery", "contact", "admin-panel"];
+=======
 const ADMIN_USERNAME_HASH = "4e129f4bb55341b97b18ec28aa6321140f5a88a563e4cf93de9d57c0aeb0fd4c";
 const ADMIN_PASSWORD_HASH = "a208b545295701f87f4cf5100b7a99c05c426c91a359a4abe7ff2e09b4d9004f";
 
 const ADMIN_USERNAME_HASH = "4e129f4bb55341b97b18ec28aa6321140f5a88a563e4cf93de9d57c0aeb0fd4c";
 const ADMIN_PASSWORD_HASH = "a208b545295701f87f4cf5100b7a99c05c426c91a359a4abe7ff2e09b4d9004f";
 const ADMIN_USERNAME = "admin";
-const ADMIN_PASSWORD = "Bhawani@2026";
+const ADMIN_PASSWORD = "Bhawani@2026"; main
 
 const defaultCategories = ["Bridal Sets", "Gold Bangles", "Diamond Rings", "Temple Jewellery"];
 const defaultPrices = {
@@ -90,11 +95,20 @@ const writeStoredData = (key, value) => {
 };
 
 const hashText = async (value) => {
+codex/design-website-for-jewellery-store-bkhjok
+  let hash = 2166136261;
+  for (const character of String(value)) {
+    hash ^= character.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(16).padStart(8, "0");
+=======
   const encodedValue = new TextEncoder().encode(String(value));
   const digest = await crypto.subtle.digest("SHA-256", encodedValue);
   return [...new Uint8Array(digest)]
     .map((byte) => byte.toString(16).padStart(2, "0"))
     .join("");
+main
 };
 
 const formatCurrency = (value) => `₹${Math.round(Number(value)).toLocaleString("en-IN")}`;
@@ -114,7 +128,10 @@ let staffMembers = readStoredData("bhawaniStaff", defaultStaff);
 let adminUsers = readStoredData("bhawaniAdminUsers", []);
 let activeCategory = "All";
 let activeSearch = "";
+codex/design-website-for-jewellery-store-bkhjok
+=======
 let activeCategory = "All";
+ main
 
 const closeMobileMenu = () => {
   navToggle?.setAttribute("aria-expanded", "false");
@@ -131,15 +148,23 @@ navToggle?.addEventListener("click", () => {
 
 navLinks?.addEventListener("click", (event) => {
   if (event.target instanceof HTMLAnchorElement) {
+codex/design-website-for-jewellery-store-bkhjok
+=======
     const targetPanel = event.target.hash.replace("#", "");
     if (["gold-prices", "gallery", "contact", "admin-panel"].includes(targetPanel)) {
       showTab(targetPanel);
     }
+ main
     closeMobileMenu();
   }
 });
 
 const showTab = (panelId) => {
+ codex/design-website-for-jewellery-store-bkhjok
+  if (!tabPanelIds.includes(panelId)) return;
+
+=======
+  main
   tabButtons.forEach((button) => {
     const isSelected = button.getAttribute("aria-controls") === panelId;
     button.classList.toggle("is-active", isSelected);
@@ -163,10 +188,33 @@ tabButtons.forEach((button) => {
   });
 });
 
+codex/design-website-for-jewellery-store-bkhjok
+c onst showTabFromHash = (hash) => {
+  const panelId = hash.replace("#", "");
+  if (tabPanelIds.includes(panelId)) {
+    showTab(panelId);
+  }
+};
+
+document.addEventListener("click", (event) => {
+  const clickedElement = event.target instanceof Element ? event.target : event.target.parentElement;
+  const anchor = clickedElement?.closest('a[href^="#"]');
+  if (!anchor) return;
+
+  const panelId = anchor.hash.replace("#", "");
+  if (tabPanelIds.includes(panelId)) {
+    showTab(panelId);
+  }
+});
+
+window.addEventListener("hashchange", () => showTabFromHash(window.location.hash));
+showTabFromHash(window.location.hash);
+=======
 const requestedPanel = window.location.hash.replace("#", "");
 if (["gold-prices", "gallery", "contact", "admin-panel"].includes(requestedPanel)) {
   showTab(requestedPanel);
 }
+ main
 
 const renderPrices = () => {
   if (!priceGrid) return;
@@ -183,11 +231,14 @@ const renderPrices = () => {
     ["10 gram 24K", gold24 * 10, "Auto-calculated from 24K per gram"],
     ["1 tola 22K", gold22 * tolaInGrams, "1 tola = 11.664 gram"],
     ["1 gram silver", silver, "Silver rate for Sindhari"],
+ codex/design-website-for-jewellery-store-bkhjok
+=======
   priceUpdated.textContent = `Updated: ${prices.updatedAt}`;
   priceGrid.innerHTML = [
     ["22K Gold", prices.gold22, "Most popular for jewellery"],
     ["24K Gold", prices.gold24, "Pure gold reference rate"],
     ["Silver", prices.silver, "Silver rate for Sindhari"],
+ main
   ]
     .map(
       ([label, value, helpText]) => `
@@ -195,8 +246,11 @@ const renderPrices = () => {
           <span>${label}</span>
           <strong>${formatCurrency(value)}</strong>
           <small>${helpText}</small>
+ codex/design-website-for-jewellery-store-bkhjok
+=======
           <strong>₹${Number(value).toLocaleString("en-IN")}</strong>
           <small>${helpText} • per gram</small>
+ main
         </article>
       `,
     )
@@ -244,6 +298,8 @@ const renderGallery = () => {
 
   if (!visibleItems.length) {
     galleryGrid.innerHTML = '<div class="empty-state">No jewellery images matched. Try another search or category.</div>';
+ codex/design-website-for-jewellery-store-bkhjok
+=======
 const renderGallery = () => {
   if (!galleryGrid) return;
 
@@ -253,6 +309,7 @@ const renderGallery = () => {
 
   if (!visibleItems.length) {
     galleryGrid.innerHTML = '<div class="empty-state">No jewellery images in this category yet. Admin can upload new items from the Admin Panel tab.</div>';
+ main
     return;
   }
 
@@ -386,7 +443,10 @@ contactMessageForm?.addEventListener("submit", (event) => {
 });
 
 adminLoginForm?.addEventListener("submit", async (event) => {
+ codex/design-website-for-jewellery-store-bkhjok
+=======
 adminLoginForm?.addEventListener("submit", (event) => {
+main
   event.preventDefault();
   const formData = new FormData(adminLoginForm);
   const username = formData.get("username");
@@ -397,8 +457,10 @@ adminLoginForm?.addEventListener("submit", (event) => {
     (admin) => admin.usernameHash === usernameHash && admin.passwordHash === passwordHash,
   );
   const isAdmin = isDefaultAdmin || isAdditionalAdmin;
+ codex/design-website-for-jewellery-store-bkhjok
+=======
   const isAdmin = usernameHash === ADMIN_USERNAME_HASH && passwordHash === ADMIN_PASSWORD_HASH;
-  const isAdmin = username === ADMIN_USERNAME && password === ADMIN_PASSWORD;
+  const isAdmin = username === ADMIN_USERNAME && password === ADMIN_PASSWORD; main
 
   adminLoginStatus.textContent = isAdmin
     ? "Login successful. Admin features are now available."
