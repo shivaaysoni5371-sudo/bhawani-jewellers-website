@@ -904,6 +904,12 @@ h2 {
   font-family: "Inter", system-ui, sans-serif;
 }
 
+.admin-help {
+  margin: -6px 0 4px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .form-row {
   display: grid;
   gap: 14px;

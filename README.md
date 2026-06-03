@@ -43,6 +43,9 @@ Then open:
 http://127.0.0.1:4173/
 ```
 
+## Demo admin panel
+
+The static demo admin panel uses browser-only storage for preview purposes. Admin credentials are not printed on the public page or in this README.
 ## Demo admin login
 
 The static demo admin panel uses browser-only storage for preview purposes.

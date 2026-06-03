@@ -172,6 +172,10 @@
                 <div class="admin-login-card">
                   <p class="eyebrow">Panel Admin Login</p>
                   <h2>Admin controls</h2>
+                  <p class="demo-note">Admin credentials are kept private. For a live website, move authentication and image storage to a secure backend.</p>
+                  <form class="admin-login-form" aria-label="Admin login form">
+                    <label>Admin username<input type="text" name="username" autocomplete="username" placeholder="Enter admin username" required /></label>
+                    <label>Password<input type="password" name="password" autocomplete="current-password" placeholder="Enter password" required /></label>
                   <p class="demo-note">Demo credentials: <strong>admin</strong> / <strong>Bhawani@2026</strong>. For a live website, move authentication and image storage to a secure backend.</p>
                   <form class="admin-login-form" aria-label="Admin login form">
                     <label>Admin username<input type="text" name="username" autocomplete="username" placeholder="admin" required /></label>
@@ -192,6 +196,7 @@
 
                   <form class="admin-form" id="gold-price-form" aria-label="Daily gold price update form">
                     <h3>Daily gold prices for Sindhari, Balotra</h3>
+                    <p class="admin-help">Enter per-gram rates once; the website automatically calculates 1g, 10g, and 1 tola (11.664g) display prices.</p>
                     <div class="form-row three">
                       <label>22K Gold / gram<input type="number" name="gold22" min="0" step="1" required /></label>
                       <label>24K Gold / gram<input type="number" name="gold24" min="0" step="1" required /></label>

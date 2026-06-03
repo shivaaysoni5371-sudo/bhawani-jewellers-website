@@ -18,6 +18,8 @@ const uploadForm = document.querySelector("#upload-form");
 const uploadCategory = document.querySelector("#upload-category");
 const uploadStatus = document.querySelector("#upload-status");
 
+const ADMIN_USERNAME_HASH = "4e129f4bb55341b97b18ec28aa6321140f5a88a563e4cf93de9d57c0aeb0fd4c";
+const ADMIN_PASSWORD_HASH = "a208b545295701f87f4cf5100b7a99c05c426c91a359a4abe7ff2e09b4d9004f";
 const ADMIN_USERNAME = "admin";
 const ADMIN_PASSWORD = "Bhawani@2026";
 
@@ -68,6 +70,16 @@ const readStoredData = (key, fallback) => {
 const writeStoredData = (key, value) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
+
+const hashText = async (value) => {
+  const encodedValue = new TextEncoder().encode(String(value));
+  const digest = await crypto.subtle.digest("SHA-256", encodedValue);
+  return [...new Uint8Array(digest)]
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+};
+
+const formatCurrency = (value) => `₹${Math.round(Number(value)).toLocaleString("en-IN")}`;
 
 const escapeHtml = (value) =>
   String(value)
@@ -137,6 +149,18 @@ if (["gold-prices", "gallery", "contact", "admin-panel"].includes(requestedPanel
 const renderPrices = () => {
   if (!priceGrid) return;
 
+  const gold22 = Number(prices.gold22);
+  const gold24 = Number(prices.gold24);
+  const silver = Number(prices.silver);
+  const tolaInGrams = 11.664;
+
+  priceUpdated.textContent = `Updated: ${prices.updatedAt}`;
+  priceGrid.innerHTML = [
+    ["1 gram 22K", gold22, "22K gold per gram"],
+    ["10 gram 22K", gold22 * 10, "Auto-calculated from 22K per gram"],
+    ["10 gram 24K", gold24 * 10, "Auto-calculated from 24K per gram"],
+    ["1 tola 22K", gold22 * tolaInGrams, "1 tola = 11.664 gram"],
+    ["1 gram silver", silver, "Silver rate for Sindhari"],
   priceUpdated.textContent = `Updated: ${prices.updatedAt}`;
   priceGrid.innerHTML = [
     ["22K Gold", prices.gold22, "Most popular for jewellery"],
@@ -147,6 +171,8 @@ const renderPrices = () => {
       ([label, value, helpText]) => `
         <article class="price-card">
           <span>${label}</span>
+          <strong>${formatCurrency(value)}</strong>
+          <small>${helpText}</small>
           <strong>₹${Number(value).toLocaleString("en-IN")}</strong>
           <small>${helpText} • per gram</small>
         </article>
@@ -241,11 +267,14 @@ contactMessageForm?.addEventListener("submit", (event) => {
   submitButton.textContent = "Message received";
 });
 
+adminLoginForm?.addEventListener("submit", async (event) => {
 adminLoginForm?.addEventListener("submit", (event) => {
   event.preventDefault();
   const formData = new FormData(adminLoginForm);
   const username = formData.get("username");
   const password = formData.get("password");
+  const [usernameHash, passwordHash] = await Promise.all([hashText(username), hashText(password)]);
+  const isAdmin = usernameHash === ADMIN_USERNAME_HASH && passwordHash === ADMIN_PASSWORD_HASH;
   const isAdmin = username === ADMIN_USERNAME && password === ADMIN_PASSWORD;
 
   adminLoginStatus.textContent = isAdmin
