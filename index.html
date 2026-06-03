@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Bhawani Jewellers offers handcrafted gold, diamond, bridal, and everyday jewellery collections with heritage service."
+    />
+    <title>Bhawani Jewellers | Timeless Jewellery for Every Celebration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header" id="top">
+      <nav class="navbar" aria-label="Main navigation">
+        <a class="brand" href="#top" aria-label="Bhawani Jewellers home">
+          <span class="brand-mark">BJ</span>
+          <span>
+            <strong>Bhawani</strong>
+            <small>Jewellers</small>
+          </span>
+        </a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-menu">
+          <span class="sr-only">Toggle menu</span>
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links" id="primary-menu">
+          <li><a href="#collections">Collections</a></li>
+          <li><a href="#gold-prices">Gold Prices</a></li>
+          <li><a href="#gallery">Jewellery Images</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+          <li><a class="nav-cta" href="#admin-panel">Admin Login</a></li>
+        </ul>
+      </nav>
+
+      <section class="hero section-shell">
+        <div class="hero-copy">
+          <p class="eyebrow">Since 1998 • Trusted Family Jewellers</p>
+          <h1>Heritage jewellery crafted for your brightest moments.</h1>
+          <p>
+            Discover bridal sets, temple jewellery, diamonds, and daily wear pieces designed with
+            uncompromising purity, graceful detail, and personal service.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#collections">Explore Collections</a>
+            <a class="button secondary" href="#gold-prices">Today's Gold Price</a>
+          </div>
+        </div>
+        <div class="hero-card" aria-label="Featured jewellery highlights">
+          <div class="ornament top"></div>
+          <div class="jewel-display">
+            <div class="necklace"></div>
+            <div class="gem center"></div>
+            <div class="gem left"></div>
+            <div class="gem right"></div>
+          </div>
+          <div class="feature-panel">
+            <span>New Bridal Edit</span>
+            <strong>Kundan, Polki & 22K Gold</strong>
+          </div>
+          <div class="ornament bottom"></div>
+        </div>
+      </section>
+    </header>
+
+    <main>
+      <section class="trust-strip" aria-label="Store promises">
+        <div><strong>BIS Hallmarked</strong><span>Certified purity</span></div>
+        <div><strong>Custom Designs</strong><span>Made for your story</span></div>
+        <div><strong>Lifetime Care</strong><span>Cleaning & polishing</span></div>
+        <div><strong>Fair Pricing</strong><span>Transparent billing</span></div>
+      </section>
+
+      <section class="section-shell collections" id="collections">
+        <div class="section-heading">
+          <p class="eyebrow">Signature Collections</p>
+          <h2>Jewellery for weddings, festivals, and everyday elegance.</h2>
+        </div>
+        <div class="collection-grid">
+          <article class="collection-card bridal">
+            <span>01</span>
+            <h3>Bridal Grandeur</h3>
+            <p>Statement chokers, rani haars, bangles, and maang tikkas curated for every ceremony.</p>
+          </article>
+          <article class="collection-card diamond">
+            <span>02</span>
+            <h3>Diamond Classics</h3>
+            <p>Solitaire rings, tennis bracelets, and elegant earrings with brilliant everyday sparkle.</p>
+          </article>
+          <article class="collection-card gold">
+            <span>03</span>
+            <h3>22K Gold Essentials</h3>
+            <p>Chains, pendants, hoops, and bangles that bring warmth to daily styling.</p>
+          </article>
+          <article class="collection-card temple">
+            <span>04</span>
+            <h3>Temple Heritage</h3>
+            <p>Traditional motifs inspired by goddess forms, peacocks, lotus blooms, and antique finishes.</p>
+          </article>
+        </div>
+      </section>
+
+
+      <section class="tabs-section" id="store-tabs">
+        <div class="section-shell">
+          <div class="section-heading tabs-heading">
+            <p class="eyebrow">Store Desk</p>
+            <h2>Daily jewellery rates, images, contact, and admin tools.</h2>
+          </div>
+          <div class="tab-card">
+            <div class="tab-list" role="tablist" aria-label="Bhawani Jewellers information tabs">
+              <button class="tab-button is-active" type="button" role="tab" aria-selected="true" aria-controls="gold-prices" id="tab-gold-prices">Daily Gold Prices</button>
+              <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="gallery" id="tab-gallery">Jewellery Images</button>
+              <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="contact" id="tab-contact">Contact Us</button>
+              <button class="tab-button" type="button" role="tab" aria-selected="false" aria-controls="admin-panel" id="tab-admin-panel">Admin Panel</button>
+            </div>
+
+            <section class="tab-panel is-active" id="gold-prices" role="tabpanel" aria-labelledby="tab-gold-prices">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Sindhari, Balotra</p>
+                  <h2>Daily gold prices</h2>
+                  <p>Indicative Bhawani Jewellers store rates. Please call before purchase for final billing rate.</p>
+                </div>
+                <span class="updated-pill" id="price-updated">Updated today</span>
+              </div>
+              <div class="price-grid" id="price-grid" aria-live="polite"></div>
+              <form class="price-breakup-form" id="price-breakup-form" aria-label="Smart price breakup calculator">
+                <div>
+                  <p class="eyebrow">Smart Calculator</p>
+                  <h3>Price breakup calculator</h3>
+                  <p>Choose purity and enter weight to calculate gold value, making charges, GST, and total estimate.</p>
+                </div>
+                <div class="form-row four">
+                  <label>Purity<select name="purity"><option value="gold22">22K Gold</option><option value="gold24">24K Gold</option><option value="silver">Silver</option></select></label>
+                  <label>Weight (gram)<input type="number" name="weight" min="0" step="0.001" value="10" required /></label>
+                  <label>Making / gram<input type="number" name="making" min="0" step="1" value="0" /></label>
+                  <label>GST %<input type="number" name="gst" min="0" step="0.1" value="3" /></label>
+                </div>
+                <button class="button secondary dark" type="submit">Calculate Breakup</button>
+                <div class="breakup-result" id="breakup-result" aria-live="polite"></div>
+              </form>
+            </section>
+
+            <section class="tab-panel" id="gallery" role="tabpanel" aria-labelledby="tab-gallery" hidden>
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Jewellery Images</p>
+                  <h2>Browse by category</h2>
+                  <p>Images uploaded by the admin are automatically arranged under their selected jewellery category.</p>
+                </div>
+              </div>
+              <form class="gallery-search" id="gallery-search" role="search" aria-label="Search jewellery">
+                <label class="sr-only" for="jewellery-search-input">Search jewellery</label>
+                <input id="jewellery-search-input" type="search" name="search" placeholder="Search necklace, bangles, rings..." />
+                <button class="button secondary dark" type="submit">Search</button>
+                <button class="button secondary dark" type="button" id="clear-search">Clear</button>
+              </form>
+              <div class="gallery-filter" id="gallery-filter" aria-label="Jewellery category filters"></div>
+              <div class="gallery-grid" id="gallery-grid" aria-live="polite"></div>
+            </section>
+
+            <section class="tab-panel" id="contact" role="tabpanel" aria-labelledby="tab-contact" hidden>
+              <div class="contact-layout">
+                <div>
+                  <p class="eyebrow">Contact Us</p>
+                  <h2>Talk to Bhawani Jewellers</h2>
+                  <p>Call, WhatsApp, Instagram DM, or visit our Sindhari Balotra jewellery store for gold rates, product availability, orders, repairs, and bridal appointments.</p>
+                  <div class="contact-cards">
+                    <a href="tel:+918890599101"><strong>Bhaira Ram</strong><span>+91 88905 99101</span></a>
+                    <a href="tel:+916367708444"><strong>Sawai Ram</strong><span>+91 63677 08444</span></a>
+                    <a href="https://wa.me/918890599101"><strong>WhatsApp</strong><span>Message Bhawani Jewellers</span></a>
+                    <a href="https://www.instagram.com/bhawani_jewellerss"><strong>Instagram</strong><span>@bhawani_jewellerss</span></a>
+                  </div>
+                </div>
+                <form class="contact-message-form" aria-label="Contact message form">
+                  <label>Name<input type="text" name="contactName" placeholder="Your name" required /></label>
+                  <label>Phone<input type="tel" name="contactPhone" placeholder="Phone number" required /></label>
+                  <label>Message<textarea name="message" placeholder="How can we help?" required></textarea></label>
+                  <button class="button primary" type="submit">Send Message</button>
+                </form>
+              </div>
+            </section>
+
+            <section class="tab-panel" id="admin-panel" role="tabpanel" aria-labelledby="tab-admin-panel" hidden>
+              <div class="admin-grid">
+                <div class="admin-login-card">
+                  <p class="eyebrow">Panel Admin Login</p>
+                  <h2>Admin controls</h2>
+                  <p class="demo-note">Admin credentials are kept private. For a live website, move authentication and image storage to a secure backend.</p>
+                  <form class="admin-login-form" aria-label="Admin login form">
+                    <label>Admin username<input type="text" name="username" autocomplete="username" placeholder="Enter admin username" required /></label>
+                    <label>Password<input type="password" name="password" autocomplete="current-password" placeholder="Enter password" required /></label>
+                    <button class="button primary" type="submit">Login to Panel</button>
+                    <button class="link-button" id="forgot-password" type="button">Forgot password?</button>
+                    <p class="form-status" id="admin-login-status" aria-live="polite"></p>
+                  </form>
+                </div>
+
+                <div class="admin-tools" hidden>
+                  <div class="admin-tools-header">
+                    <div>
+                      <p class="eyebrow">Admin Features</p>
+                      <h2>Upload jewellery and update rates</h2>
+                    </div>
+                    <button class="button secondary dark" type="button" id="admin-logout">Logout</button>
+                  </div>
+
+                  <form class="admin-form" id="gold-price-form" aria-label="Daily gold price update form">
+                    <h3>Daily gold prices for Sindhari, Balotra</h3>
+                    <p class="admin-help">Enter per-gram rates once; the website automatically calculates 1g, 10g, and 1 tola (11.664g) display prices.</p>
+                    <div class="form-row three">
+                      <label>22K Gold / gram<input type="number" name="gold22" min="0" step="1" required /></label>
+                      <label>24K Gold / gram<input type="number" name="gold24" min="0" step="1" required /></label>
+                      <label>Silver / gram<input type="number" name="silver" min="0" step="1" required /></label>
+                    </div>
+                    <button class="button primary" type="submit">Update Prices</button>
+                  </form>
+
+                  <form class="admin-form" id="category-form" aria-label="Create jewellery category form">
+                    <h3>Create category</h3>
+                    <div class="inline-form">
+                      <label>New category name<input type="text" name="categoryName" placeholder="Example: Rings" required /></label>
+                      <button class="button secondary dark" type="submit">Create Category</button>
+                    </div>
+                  </form>
+
+
+
+                  <form class="admin-form" id="staff-form" aria-label="Staff management form">
+                    <h3>Staff management</h3>
+                    <div class="form-row three">
+                      <label>Staff name<input type="text" name="staffName" placeholder="Staff member name" required /></label>
+                      <label>Role<input type="text" name="staffRole" placeholder="Sales / Billing / Manager" required /></label>
+                      <label>Phone<input type="tel" name="staffPhone" placeholder="Phone number" required /></label>
+                    </div>
+                    <button class="button secondary dark" type="submit">Add Staff</button>
+                    <div class="management-list" id="staff-list" aria-live="polite"></div>
+                  </form>
+
+                  <form class="admin-form" id="admin-user-form" aria-label="Add another admin form">
+                    <h3>Add another admin</h3>
+                    <p class="admin-help">Create extra admin access without showing passwords on the public page.</p>
+                    <div class="form-row two">
+                      <label>New admin username<input type="text" name="newAdminUsername" autocomplete="off" placeholder="New admin username" required /></label>
+                      <label>New admin password<input type="password" name="newAdminPassword" autocomplete="new-password" placeholder="New admin password" required /></label>
+                    </div>
+                    <button class="button secondary dark" type="submit">Add Admin</button>
+                    <div class="management-list" id="admin-user-list" aria-live="polite"></div>
+                  </form>
+
+                  <form class="admin-form" id="upload-form" aria-label="Jewellery image upload form">
+                    <h3>Jewellery image upload</h3>
+                    <div class="form-row two">
+                      <label>Jewellery name<input type="text" name="itemName" placeholder="Antique Gold Necklace" required /></label>
+                      <label>Choose jewellery category<select name="itemCategory" id="upload-category" required></select></label>
+                    </div>
+                    <div class="form-row two">
+                      <label>Approx weight<input type="text" name="itemWeight" placeholder="Approx 28 gram" required /></label>
+                      <label>Upload jewellery image<input type="file" name="itemImage" accept="image/*" required /></label>
+                    </div>
+                    <button class="button primary" type="submit">Upload & Auto Arrange</button>
+                    <p class="form-status" id="upload-status" aria-live="polite"></p>
+                  </form>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="showcase" id="craft">
+        <div class="section-shell showcase-inner">
+          <div class="showcase-art" aria-hidden="true">
+            <div class="ring ring-one"></div>
+            <div class="ring ring-two"></div>
+            <div class="sparkle sparkle-one"></div>
+            <div class="sparkle sparkle-two"></div>
+          </div>
+          <div class="showcase-copy">
+            <p class="eyebrow">Crafted with Care</p>
+            <h2>From your first sketch to the final polish, every detail is guided by master artisans.</h2>
+            <p>
+              Our team helps you choose the right metal, gemstone, fit, and finish. Whether restoring a
+              family heirloom or designing a modern bridal set, we keep the process personal and transparent.
+            </p>
+            <ul class="check-list">
+              <li>Design consultation with expert stylists</li>
+              <li>Gemstone selection and quality guidance</li>
+              <li>Repairs, resizing, polishing, and exchange support</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-shell testimonials">
+        <div class="quote-card">
+          <p>
+            “Bhawani Jewellers helped us create the perfect bridal set. The service felt personal, honest,
+            and truly celebratory.”
+          </p>
+          <strong>— A happy Bhawani bride</strong>
+        </div>
+        <div class="stats-card">
+          <div><strong>25+</strong><span>Years of trust</span></div>
+          <div><strong>8k+</strong><span>Families served</span></div>
+          <div><strong>100%</strong><span>Purity commitment</span></div>
+        </div>
+      </section>
+
+      <section class="appointment" id="appointment">
+        <div class="section-shell appointment-inner">
+          <div>
+            <p class="eyebrow">Private Shopping</p>
+            <h2>Book a one-on-one jewellery consultation.</h2>
+            <p>
+              Tell us your occasion, preferred budget, and favourite styles. We will prepare a curated tray
+              before you arrive.
+            </p>
+          </div>
+          <form class="contact-form" aria-label="Appointment form">
+            <label>
+              Name
+              <input type="text" name="name" placeholder="Your name" required />
+            </label>
+            <label>
+              Phone
+              <input type="tel" name="phone" placeholder="Your phone number" required />
+            </label>
+            <label>
+              Occasion
+              <select name="occasion" required>
+                <option value="">Select occasion</option>
+                <option>Bridal jewellery</option>
+                <option>Festival shopping</option>
+                <option>Custom design</option>
+                <option>Repair or exchange</option>
+              </select>
+            </label>
+            <button class="button primary" type="submit">Request Appointment</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" id="visit">
+      <div class="section-shell footer-grid">
+        <div>
+          <a class="brand footer-brand" href="#top">
+            <span class="brand-mark">BJ</span>
+            <span><strong>Bhawani</strong><small>Jewellers</small></span>
+          </a>
+          <p>Elegant gold, diamond, and bridal jewellery with trusted family service.</p>
+        </div>
+        <div>
+          <h3>Visit</h3>
+          <p>Nimbalkot Road, near RMGB Bank<br />Hodu, Sindhari, Balotra</p>
+        </div>
+        <div>
+          <h3>Hours</h3>
+          <p>Mon–Sat: 10:30 AM – 8:30 PM<br />Sunday: 11:00 AM – 6:00 PM</p>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <p>Bhaira Ram: <a href="tel:+918890599101">+91 88905 99101</a><br />Sawai Ram: <a href="tel:+916367708444">+91 63677 08444</a><br /><a href="https://www.instagram.com/bhawani_jewellerss">@bhawani_jewellerss</a></p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
