@@ -131,6 +131,21 @@
                 <span class="updated-pill" id="price-updated">Updated today</span>
               </div>
               <div class="price-grid" id="price-grid" aria-live="polite"></div>
+              <form class="price-breakup-form" id="price-breakup-form" aria-label="Smart price breakup calculator">
+                <div>
+                  <p class="eyebrow">Smart Calculator</p>
+                  <h3>Price breakup calculator</h3>
+                  <p>Choose purity and enter weight to calculate gold value, making charges, GST, and total estimate.</p>
+                </div>
+                <div class="form-row four">
+                  <label>Purity<select name="purity"><option value="gold22">22K Gold</option><option value="gold24">24K Gold</option><option value="silver">Silver</option></select></label>
+                  <label>Weight (gram)<input type="number" name="weight" min="0" step="0.001" value="10" required /></label>
+                  <label>Making / gram<input type="number" name="making" min="0" step="1" value="0" /></label>
+                  <label>GST %<input type="number" name="gst" min="0" step="0.1" value="3" /></label>
+                </div>
+                <button class="button secondary dark" type="submit">Calculate Breakup</button>
+                <div class="breakup-result" id="breakup-result" aria-live="polite"></div>
+              </form>
             </section>
 
             <section class="tab-panel" id="gallery" role="tabpanel" aria-labelledby="tab-gallery" hidden>
@@ -141,6 +156,12 @@
                   <p>Images uploaded by the admin are automatically arranged under their selected jewellery category.</p>
                 </div>
               </div>
+              <form class="gallery-search" id="gallery-search" role="search" aria-label="Search jewellery">
+                <label class="sr-only" for="jewellery-search-input">Search jewellery</label>
+                <input id="jewellery-search-input" type="search" name="search" placeholder="Search necklace, bangles, rings..." />
+                <button class="button secondary dark" type="submit">Search</button>
+                <button class="button secondary dark" type="button" id="clear-search">Clear</button>
+              </form>
               <div class="gallery-filter" id="gallery-filter" aria-label="Jewellery category filters"></div>
               <div class="gallery-grid" id="gallery-grid" aria-live="polite"></div>
             </section>
@@ -176,11 +197,8 @@
                   <form class="admin-login-form" aria-label="Admin login form">
                     <label>Admin username<input type="text" name="username" autocomplete="username" placeholder="Enter admin username" required /></label>
                     <label>Password<input type="password" name="password" autocomplete="current-password" placeholder="Enter password" required /></label>
-                  <p class="demo-note">Demo credentials: <strong>admin</strong> / <strong>Bhawani@2026</strong>. For a live website, move authentication and image storage to a secure backend.</p>
-                  <form class="admin-login-form" aria-label="Admin login form">
-                    <label>Admin username<input type="text" name="username" autocomplete="username" placeholder="admin" required /></label>
-                    <label>Password<input type="password" name="password" autocomplete="current-password" placeholder="Bhawani@2026" required /></label>
                     <button class="button primary" type="submit">Login to Panel</button>
+                    <button class="link-button" id="forgot-password" type="button">Forgot password?</button>
                     <p class="form-status" id="admin-login-status" aria-live="polite"></p>
                   </form>
                 </div>
@@ -211,6 +229,30 @@
                       <label>New category name<input type="text" name="categoryName" placeholder="Example: Rings" required /></label>
                       <button class="button secondary dark" type="submit">Create Category</button>
                     </div>
+                  </form>
+
+
+
+                  <form class="admin-form" id="staff-form" aria-label="Staff management form">
+                    <h3>Staff management</h3>
+                    <div class="form-row three">
+                      <label>Staff name<input type="text" name="staffName" placeholder="Staff member name" required /></label>
+                      <label>Role<input type="text" name="staffRole" placeholder="Sales / Billing / Manager" required /></label>
+                      <label>Phone<input type="tel" name="staffPhone" placeholder="Phone number" required /></label>
+                    </div>
+                    <button class="button secondary dark" type="submit">Add Staff</button>
+                    <div class="management-list" id="staff-list" aria-live="polite"></div>
+                  </form>
+
+                  <form class="admin-form" id="admin-user-form" aria-label="Add another admin form">
+                    <h3>Add another admin</h3>
+                    <p class="admin-help">Create extra admin access without showing passwords on the public page.</p>
+                    <div class="form-row two">
+                      <label>New admin username<input type="text" name="newAdminUsername" autocomplete="off" placeholder="New admin username" required /></label>
+                      <label>New admin password<input type="password" name="newAdminPassword" autocomplete="new-password" placeholder="New admin password" required /></label>
+                    </div>
+                    <button class="button secondary dark" type="submit">Add Admin</button>
+                    <div class="management-list" id="admin-user-list" aria-live="polite"></div>
                   </form>
 
                   <form class="admin-form" id="upload-form" aria-label="Jewellery image upload form">

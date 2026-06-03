@@ -8,6 +8,11 @@ const priceGrid = document.querySelector("#price-grid");
 const priceUpdated = document.querySelector("#price-updated");
 const galleryFilter = document.querySelector("#gallery-filter");
 const galleryGrid = document.querySelector("#gallery-grid");
+const gallerySearchForm = document.querySelector("#gallery-search");
+const jewellerySearchInput = document.querySelector("#jewellery-search-input");
+const clearSearchButton = document.querySelector("#clear-search");
+const priceBreakupForm = document.querySelector("#price-breakup-form");
+const breakupResult = document.querySelector("#breakup-result");
 const adminLoginForm = document.querySelector(".admin-login-form");
 const adminLoginStatus = document.querySelector("#admin-login-status");
 const adminTools = document.querySelector(".admin-tools");
@@ -17,6 +22,14 @@ const categoryForm = document.querySelector("#category-form");
 const uploadForm = document.querySelector("#upload-form");
 const uploadCategory = document.querySelector("#upload-category");
 const uploadStatus = document.querySelector("#upload-status");
+const forgotPasswordButton = document.querySelector("#forgot-password");
+const staffForm = document.querySelector("#staff-form");
+const staffList = document.querySelector("#staff-list");
+const adminUserForm = document.querySelector("#admin-user-form");
+const adminUserList = document.querySelector("#admin-user-list");
+
+const ADMIN_USERNAME_HASH = "4e129f4bb55341b97b18ec28aa6321140f5a88a563e4cf93de9d57c0aeb0fd4c";
+const ADMIN_PASSWORD_HASH = "a208b545295701f87f4cf5100b7a99c05c426c91a359a4abe7ff2e09b4d9004f";
 
 const ADMIN_USERNAME_HASH = "4e129f4bb55341b97b18ec28aa6321140f5a88a563e4cf93de9d57c0aeb0fd4c";
 const ADMIN_PASSWORD_HASH = "a208b545295701f87f4cf5100b7a99c05c426c91a359a4abe7ff2e09b4d9004f";
@@ -62,6 +75,11 @@ const defaultJewellery = [
   },
 ];
 
+const defaultStaff = [
+  { name: "Sawai Ram", role: "Admin", phone: "+91 63677 08444" },
+  { name: "Bhaira Ram", role: "Sales", phone: "+91 88905 99101" },
+];
+
 const readStoredData = (key, fallback) => {
   const storedValue = localStorage.getItem(key);
   return storedValue ? JSON.parse(storedValue) : fallback;
@@ -92,6 +110,10 @@ const escapeHtml = (value) =>
 let categories = readStoredData("bhawaniCategories", defaultCategories);
 let prices = readStoredData("bhawaniPrices", defaultPrices);
 let jewelleryItems = readStoredData("bhawaniJewellery", defaultJewellery);
+let staffMembers = readStoredData("bhawaniStaff", defaultStaff);
+let adminUsers = readStoredData("bhawaniAdminUsers", []);
+let activeCategory = "All";
+let activeSearch = "";
 let activeCategory = "All";
 
 const closeMobileMenu = () => {
@@ -204,6 +226,24 @@ const renderGalleryFilters = () => {
     .join("");
 };
 
+const buildWhatsAppLink = (item) => {
+  const message = `Namaste Bhawani Jewellers, I want to enquire about ${item.name} (${item.category}, ${item.weight}).`;
+  return `https://wa.me/918890599101?text=${encodeURIComponent(message)}`;
+};
+
+const renderGallery = () => {
+  if (!galleryGrid) return;
+
+  const searchText = activeSearch.toLowerCase();
+  const visibleItems = jewelleryItems.filter((item) => {
+    const matchesCategory = activeCategory === "All" || item.category === activeCategory;
+    const searchableText = `${item.name} ${item.category} ${item.weight}`.toLowerCase();
+    const matchesSearch = !searchText || searchableText.includes(searchText);
+    return matchesCategory && matchesSearch;
+  });
+
+  if (!visibleItems.length) {
+    galleryGrid.innerHTML = '<div class="empty-state">No jewellery images matched. Try another search or category.</div>';
 const renderGallery = () => {
   if (!galleryGrid) return;
 
@@ -229,6 +269,9 @@ const renderGallery = () => {
             <span>${escapeHtml(item.category)}</span>
             <h3>${escapeHtml(item.name)}</h3>
             <p>${escapeHtml(item.weight)}</p>
+            <div class="card-actions">
+              <a class="button primary small" href="${buildWhatsAppLink(item)}" target="_blank" rel="noopener">WhatsApp Enquiry</a>
+            </div>
           </div>
         </article>
       `;
@@ -241,6 +284,64 @@ const refreshStorefront = () => {
   renderCategoryOptions();
   renderGalleryFilters();
   renderGallery();
+  renderStaffList();
+  renderAdminUserList();
+  calculatePriceBreakup();
+};
+
+const renderStaffList = () => {
+  if (!staffList) return;
+
+  staffList.innerHTML = staffMembers
+    .map(
+      (staff, index) => `
+        <div class="management-item">
+          <span><strong>${escapeHtml(staff.name)}</strong><small>${escapeHtml(staff.role)} • ${escapeHtml(staff.phone)}</small></span>
+          <button class="link-button danger" type="button" data-staff-index="${index}">Remove</button>
+        </div>
+      `,
+    )
+    .join("");
+};
+
+const renderAdminUserList = () => {
+  if (!adminUserList) return;
+
+  adminUserList.innerHTML = adminUsers.length
+    ? adminUsers
+        .map(
+          (admin, index) => `
+            <div class="management-item">
+              <span><strong>${escapeHtml(admin.username)}</strong><small>Additional admin</small></span>
+              <button class="link-button danger" type="button" data-admin-index="${index}">Remove</button>
+            </div>
+          `,
+        )
+        .join("")
+    : '<div class="empty-state compact">No extra admins added yet.</div>';
+};
+
+const calculatePriceBreakup = () => {
+  if (!priceBreakupForm || !breakupResult) return;
+
+  const formData = new FormData(priceBreakupForm);
+  const purity = formData.get("purity");
+  const weight = Number(formData.get("weight"));
+  const makingPerGram = Number(formData.get("making"));
+  const gstPercent = Number(formData.get("gst"));
+  const rate = Number(prices[purity]);
+  const metalValue = rate * weight;
+  const makingValue = makingPerGram * weight;
+  const subtotal = metalValue + makingValue;
+  const gstValue = (subtotal * gstPercent) / 100;
+  const total = subtotal + gstValue;
+
+  breakupResult.innerHTML = `
+    <div><span>Metal value</span><strong>${formatCurrency(metalValue)}</strong></div>
+    <div><span>Making charges</span><strong>${formatCurrency(makingValue)}</strong></div>
+    <div><span>GST</span><strong>${formatCurrency(gstValue)}</strong></div>
+    <div><span>Total estimate</span><strong>${formatCurrency(total)}</strong></div>
+  `;
 };
 
 galleryFilter?.addEventListener("click", (event) => {
@@ -250,6 +351,23 @@ galleryFilter?.addEventListener("click", (event) => {
   activeCategory = filterButton.dataset.category;
   renderGalleryFilters();
   renderGallery();
+});
+
+gallerySearchForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  activeSearch = jewellerySearchInput.value.trim();
+  renderGallery();
+});
+
+clearSearchButton?.addEventListener("click", () => {
+  activeSearch = "";
+  jewellerySearchInput.value = "";
+  renderGallery();
+});
+
+priceBreakupForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  calculatePriceBreakup();
 });
 
 appointmentForm?.addEventListener("submit", (event) => {
@@ -274,6 +392,11 @@ adminLoginForm?.addEventListener("submit", (event) => {
   const username = formData.get("username");
   const password = formData.get("password");
   const [usernameHash, passwordHash] = await Promise.all([hashText(username), hashText(password)]);
+  const isDefaultAdmin = usernameHash === ADMIN_USERNAME_HASH && passwordHash === ADMIN_PASSWORD_HASH;
+  const isAdditionalAdmin = adminUsers.some(
+    (admin) => admin.usernameHash === usernameHash && admin.passwordHash === passwordHash,
+  );
+  const isAdmin = isDefaultAdmin || isAdditionalAdmin;
   const isAdmin = usernameHash === ADMIN_USERNAME_HASH && passwordHash === ADMIN_PASSWORD_HASH;
   const isAdmin = username === ADMIN_USERNAME && password === ADMIN_PASSWORD;
 
@@ -285,6 +408,10 @@ adminLoginForm?.addEventListener("submit", (event) => {
   if (isAdmin) {
     adminLoginForm.reset();
   }
+});
+
+forgotPasswordButton?.addEventListener("click", () => {
+  adminLoginStatus.textContent = "Password reset is protected. Contact Sawai Ram at +91 63677 08444 to verify identity and create a new admin.";
 });
 
 adminLogout?.addEventListener("click", () => {
@@ -307,6 +434,7 @@ goldPriceForm?.addEventListener("submit", (event) => {
   };
   writeStoredData("bhawaniPrices", prices);
   renderPrices();
+  calculatePriceBreakup();
 });
 
 categoryForm?.addEventListener("submit", (event) => {
@@ -322,6 +450,58 @@ categoryForm?.addEventListener("submit", (event) => {
   }
 
   categoryForm.reset();
+});
+
+staffForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const formData = new FormData(staffForm);
+  staffMembers = [
+    ...staffMembers,
+    {
+      name: String(formData.get("staffName")),
+      role: String(formData.get("staffRole")),
+      phone: String(formData.get("staffPhone")),
+    },
+  ];
+  writeStoredData("bhawaniStaff", staffMembers);
+  staffForm.reset();
+  renderStaffList();
+});
+
+staffList?.addEventListener("click", (event) => {
+  const removeButton = event.target.closest("[data-staff-index]");
+  if (!removeButton) return;
+
+  staffMembers = staffMembers.filter((_, index) => index !== Number(removeButton.dataset.staffIndex));
+  writeStoredData("bhawaniStaff", staffMembers);
+  renderStaffList();
+});
+
+adminUserForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const formData = new FormData(adminUserForm);
+  const username = String(formData.get("newAdminUsername")).trim();
+  const password = String(formData.get("newAdminPassword"));
+  if (!username || !password) return;
+
+  const usernameHash = await hashText(username);
+  const passwordHash = await hashText(password);
+  adminUsers = [
+    ...adminUsers.filter((admin) => admin.usernameHash !== usernameHash),
+    { username, usernameHash, passwordHash },
+  ];
+  writeStoredData("bhawaniAdminUsers", adminUsers);
+  adminUserForm.reset();
+  renderAdminUserList();
+});
+
+adminUserList?.addEventListener("click", (event) => {
+  const removeButton = event.target.closest("[data-admin-index]");
+  if (!removeButton) return;
+
+  adminUsers = adminUsers.filter((_, index) => index !== Number(removeButton.dataset.adminIndex));
+  writeStoredData("bhawaniAdminUsers", adminUsers);
+  renderAdminUserList();
 });
 
 uploadForm?.addEventListener("submit", (event) => {

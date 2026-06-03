@@ -51,8 +51,8 @@ The static demo admin panel uses browser-only storage for preview purposes. Admi
 The static demo admin panel uses browser-only storage for preview purposes.
 
 ```text
-Username: admin
-Password: Bhawani@2026
+Username: Sawai_soni066
+Password: Sawai6367@8444
 ```
 
 For a production website, move admin authentication, image uploads, and gold-price updates to a secure backend/database.
