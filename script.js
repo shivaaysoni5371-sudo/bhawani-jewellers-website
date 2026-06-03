@@ -31,6 +31,11 @@ const adminUserList = document.querySelector("#admin-user-list");
 const ADMIN_USERNAME_HASH = "4e129f4bb55341b97b18ec28aa6321140f5a88a563e4cf93de9d57c0aeb0fd4c";
 const ADMIN_PASSWORD_HASH = "a208b545295701f87f4cf5100b7a99c05c426c91a359a4abe7ff2e09b4d9004f";
 
+const ADMIN_USERNAME_HASH = "4e129f4bb55341b97b18ec28aa6321140f5a88a563e4cf93de9d57c0aeb0fd4c";
+const ADMIN_PASSWORD_HASH = "a208b545295701f87f4cf5100b7a99c05c426c91a359a4abe7ff2e09b4d9004f";
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "Bhawani@2026";
+
 const defaultCategories = ["Bridal Sets", "Gold Bangles", "Diamond Rings", "Temple Jewellery"];
 const defaultPrices = {
   gold22: 6850,
@@ -109,6 +114,7 @@ let staffMembers = readStoredData("bhawaniStaff", defaultStaff);
 let adminUsers = readStoredData("bhawaniAdminUsers", []);
 let activeCategory = "All";
 let activeSearch = "";
+let activeCategory = "All";
 
 const closeMobileMenu = () => {
   navToggle?.setAttribute("aria-expanded", "false");
@@ -177,6 +183,11 @@ const renderPrices = () => {
     ["10 gram 24K", gold24 * 10, "Auto-calculated from 24K per gram"],
     ["1 tola 22K", gold22 * tolaInGrams, "1 tola = 11.664 gram"],
     ["1 gram silver", silver, "Silver rate for Sindhari"],
+  priceUpdated.textContent = `Updated: ${prices.updatedAt}`;
+  priceGrid.innerHTML = [
+    ["22K Gold", prices.gold22, "Most popular for jewellery"],
+    ["24K Gold", prices.gold24, "Pure gold reference rate"],
+    ["Silver", prices.silver, "Silver rate for Sindhari"],
   ]
     .map(
       ([label, value, helpText]) => `
@@ -184,6 +195,8 @@ const renderPrices = () => {
           <span>${label}</span>
           <strong>${formatCurrency(value)}</strong>
           <small>${helpText}</small>
+          <strong>₹${Number(value).toLocaleString("en-IN")}</strong>
+          <small>${helpText} • per gram</small>
         </article>
       `,
     )
@@ -231,6 +244,15 @@ const renderGallery = () => {
 
   if (!visibleItems.length) {
     galleryGrid.innerHTML = '<div class="empty-state">No jewellery images matched. Try another search or category.</div>';
+const renderGallery = () => {
+  if (!galleryGrid) return;
+
+  const visibleItems = jewelleryItems.filter(
+    (item) => activeCategory === "All" || item.category === activeCategory,
+  );
+
+  if (!visibleItems.length) {
+    galleryGrid.innerHTML = '<div class="empty-state">No jewellery images in this category yet. Admin can upload new items from the Admin Panel tab.</div>';
     return;
   }
 
@@ -364,6 +386,7 @@ contactMessageForm?.addEventListener("submit", (event) => {
 });
 
 adminLoginForm?.addEventListener("submit", async (event) => {
+adminLoginForm?.addEventListener("submit", (event) => {
   event.preventDefault();
   const formData = new FormData(adminLoginForm);
   const username = formData.get("username");
@@ -374,6 +397,8 @@ adminLoginForm?.addEventListener("submit", async (event) => {
     (admin) => admin.usernameHash === usernameHash && admin.passwordHash === passwordHash,
   );
   const isAdmin = isDefaultAdmin || isAdditionalAdmin;
+  const isAdmin = usernameHash === ADMIN_USERNAME_HASH && passwordHash === ADMIN_PASSWORD_HASH;
+  const isAdmin = username === ADMIN_USERNAME && password === ADMIN_PASSWORD;
 
   adminLoginStatus.textContent = isAdmin
     ? "Login successful. Admin features are now available."
