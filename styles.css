@@ -974,6 +974,10 @@ h2 {
 .admin-login-form label,
 .admin-form label,
 .price-breakup-form label {
+ codex/design-website-for-jewellery-store-bkhjok
+=======
+.admin-form label {
+ main
   display: grid;
   gap: 8px;
   color: var(--maroon);
@@ -987,6 +991,10 @@ h2 {
 .admin-form select,
 .price-breakup-form input,
 .price-breakup-form select {
+ codex/design-website-for-jewellery-store-bkhjok
+=======
+.admin-form select {
+ main
   width: 100%;
   min-height: 52px;
   border: 1px solid #ead0b5;
@@ -1119,6 +1127,10 @@ h2 {
   .form-row.three,
   .form-row.four,
   .breakup-result {
+ codex/design-website-for-jewellery-store-bkhjok
+=======
+  .form-row.three {
+ main
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -1164,6 +1176,10 @@ h2 {
   .form-row.three,
   .form-row.four,
   .breakup-result {
+ codex/design-website-for-jewellery-store-bkhjok
+=======
+  .form-row.three {
+ main
     grid-template-columns: 1fr;
   }
 
