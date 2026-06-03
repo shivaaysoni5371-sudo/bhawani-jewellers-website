@@ -974,10 +974,6 @@ h2 {
 .admin-login-form label,
 .admin-form label,
 .price-breakup-form label {
- codex/design-website-for-jewellery-store-bkhjok
-=======
-.admin-form label {
- main
   display: grid;
   gap: 8px;
   color: var(--maroon);
@@ -991,10 +987,6 @@ h2 {
 .admin-form select,
 .price-breakup-form input,
 .price-breakup-form select {
- codex/design-website-for-jewellery-store-bkhjok
-=======
-.admin-form select {
- main
   width: 100%;
   min-height: 52px;
   border: 1px solid #ead0b5;
@@ -1127,10 +1119,6 @@ h2 {
   .form-row.three,
   .form-row.four,
   .breakup-result {
- codex/design-website-for-jewellery-store-bkhjok
-=======
-  .form-row.three {
- main
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -1176,10 +1164,6 @@ h2 {
   .form-row.three,
   .form-row.four,
   .breakup-result {
- codex/design-website-for-jewellery-store-bkhjok
-=======
-  .form-row.three {
- main
     grid-template-columns: 1fr;
   }
 
@@ -1214,4 +1198,105 @@ h2 {
   .ring-two {
     right: 32px;
   }
+}
+
+.gallery-card {
+  border: 1px solid #f0dfcf;
+  border-radius: 26px;
+  background: #fffaf4;
+  overflow: hidden;
+}
+
+.gallery-image img,
+.gallery-placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: linear-gradient(135deg, #fff0c3, #7d2f44);
+}
+
+.gallery-placeholder {
+  display: grid;
+  place-items: center;
+  color: var(--white);
+  font-family: "Cormorant Garamond", serif;
+  font-size: 3.2rem;
+}
+
+.gallery-card-body {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+}
+
+.gallery-card h3 {
+  margin: 0;
+  color: var(--maroon);
+  font-size: 1.8rem;
+}
+
+.gallery-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.category-pill {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: var(--maroon);
+  background: #fff0c3;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.item-meta {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.item-meta div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px dashed #ead0b5;
+  padding-bottom: 8px;
+}
+
+.item-meta dt,
+.item-meta dd {
+  margin: 0;
+}
+
+.item-meta dt {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.item-meta dd {
+  color: var(--maroon);
+  font-weight: 800;
+  text-align: right;
+}
+
+.text-link {
+  color: var(--maroon);
+  font-weight: 800;
+  text-decoration: underline;
+}
+
+.admin-form textarea {
+  width: 100%;
+  min-height: 110px;
+  border: 1px solid #ead0b5;
+  border-radius: 16px;
+  padding: 14px 16px;
+  color: var(--ink);
+  background: var(--white);
+  resize: vertical;
+  outline: none;
 }

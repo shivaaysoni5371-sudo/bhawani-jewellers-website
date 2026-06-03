@@ -17,7 +17,7 @@ const adminLoginForm = document.querySelector(".admin-login-form");
 const adminLoginStatus = document.querySelector("#admin-login-status");
 const adminTools = document.querySelector(".admin-tools");
 const adminLogout = document.querySelector("#admin-logout");
-const goldPriceForm = document.querySelector("#gold-price-form");
+const metalPriceForm = document.querySelector("#gold-price-form");
 const categoryForm = document.querySelector("#category-form");
 const uploadForm = document.querySelector("#upload-form");
 const uploadCategory = document.querySelector("#upload-category");
@@ -28,66 +28,73 @@ const staffList = document.querySelector("#staff-list");
 const adminUserForm = document.querySelector("#admin-user-form");
 const adminUserList = document.querySelector("#admin-user-list");
 
-codex/design-website-for-jewellery-store-bkhjok
-const ADMIN_USERNAME_HASH = "5108473c";
-const ADMIN_PASSWORD_HASH = "00f2996d";
+const ADMIN_USERNAME_HASH = "14cd7def31ded1e1e420c78c104dce4641e22c01a01a1db03eeac3a71e121c94";
+const ADMIN_PASSWORD_HASH = "14a096ed21f302bca494cb8e970a8afb46fc218dd728865ddf4037dbbab7e4ca";
 const tabPanelIds = ["gold-prices", "gallery", "contact", "admin-panel"];
-=======
-const ADMIN_USERNAME_HASH = "4e129f4bb55341b97b18ec28aa6321140f5a88a563e4cf93de9d57c0aeb0fd4c";
-const ADMIN_PASSWORD_HASH = "a208b545295701f87f4cf5100b7a99c05c426c91a359a4abe7ff2e09b4d9004f";
+const TOLA_IN_GRAMS = 11.664;
 
-const ADMIN_USERNAME_HASH = "4e129f4bb55341b97b18ec28aa6321140f5a88a563e4cf93de9d57c0aeb0fd4c";
-const ADMIN_PASSWORD_HASH = "a208b545295701f87f4cf5100b7a99c05c426c91a359a4abe7ff2e09b4d9004f";
-const ADMIN_USERNAME = "admin";
-const ADMIN_PASSWORD = "Bhawani@2026"; main
-
-const defaultCategories = ["Bridal Sets", "Gold Bangles", "Diamond Rings", "Temple Jewellery"];
-const defaultPrices = {
-  gold22: 6850,
-  gold24: 7470,
-  silver: 92,
-  updatedAt: new Date().toLocaleDateString("en-IN", {
+const formatDate = () =>
+  new Date().toLocaleDateString("en-IN", {
     day: "2-digit",
     month: "long",
     year: "numeric",
-  }),
+  });
+
+const defaultCategories = ["Bridal Sets", "Gold Bangles", "Diamond Rings", "Temple Jewellery", "Silver Items"];
+const defaultPrices = {
+  gold22Per10Gram: 68500,
+  gold24Per10Gram: 74700,
+  silverPerKg: 92000,
+  updatedAt: formatDate(),
 };
 
 const defaultJewellery = [
   {
     name: "Kundan Bridal Necklace",
     category: "Bridal Sets",
-    weight: "Approx 64 gram",
+    description: "Handcrafted bridal necklace with kundan-inspired detail for wedding ceremonies.",
+    metal: "gold22",
+    weightGram: 64,
     image: "",
   },
   {
     name: "Classic Gold Bangles",
     category: "Gold Bangles",
-    weight: "Approx 38 gram pair",
+    description: "Traditional pair of 22K gold bangles for daily and festive wear.",
+    metal: "gold22",
+    weightGram: 38,
     image: "",
   },
   {
     name: "Solitaire Diamond Ring",
     category: "Diamond Rings",
-    weight: "Approx 5 gram",
+    description: "Elegant ring design with approximate gold weight shown for estimate.",
+    metal: "gold22",
+    weightGram: 5,
     image: "",
   },
   {
-    name: "Antique Temple Haar",
-    category: "Temple Jewellery",
-    weight: "Approx 72 gram",
+    name: "Silver Pooja Thali",
+    category: "Silver Items",
+    description: "Silver article estimate linked with the current silver per-kg rate.",
+    metal: "silver",
+    weightGram: 120,
     image: "",
   },
 ];
 
 const defaultStaff = [
-  { name: "Sawai Ram", role: "Admin", phone: "+91 63677 08444" },
-  { name: "Bhaira Ram", role: "Sales", phone: "+91 88905 99101" },
+  { name: "Bhaira Ram", role: "Contact", phone: "+91 88905 99101" },
+  { name: "Sawai Ram", role: "Contact", phone: "+91 63677 08444" },
 ];
 
 const readStoredData = (key, fallback) => {
-  const storedValue = localStorage.getItem(key);
-  return storedValue ? JSON.parse(storedValue) : fallback;
+  try {
+    const storedValue = localStorage.getItem(key);
+    return storedValue ? JSON.parse(storedValue) : fallback;
+  } catch {
+    return fallback;
+  }
 };
 
 const writeStoredData = (key, value) => {
@@ -95,23 +102,14 @@ const writeStoredData = (key, value) => {
 };
 
 const hashText = async (value) => {
-codex/design-website-for-jewellery-store-bkhjok
-  let hash = 2166136261;
-  for (const character of String(value)) {
-    hash ^= character.charCodeAt(0);
-    hash = Math.imul(hash, 16777619);
-  }
-  return (hash >>> 0).toString(16).padStart(8, "0");
-=======
   const encodedValue = new TextEncoder().encode(String(value));
   const digest = await crypto.subtle.digest("SHA-256", encodedValue);
-  return [...new Uint8Array(digest)]
-    .map((byte) => byte.toString(16).padStart(2, "0"))
-    .join("");
-main
+  return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
 };
 
-const formatCurrency = (value) => `₹${Math.round(Number(value)).toLocaleString("en-IN")}`;
+const formatCurrency = (value) => `₹${Math.round(Number(value) || 0).toLocaleString("en-IN")}`;
+const formatWeight = (grams) => `${Number(grams || 0).toLocaleString("en-IN", { maximumFractionDigits: 3 })} g`;
+const formatTola = (grams) => `${(Number(grams || 0) / TOLA_IN_GRAMS).toLocaleString("en-IN", { maximumFractionDigits: 3 })} tola`;
 
 const escapeHtml = (value) =>
   String(value)
@@ -122,16 +120,28 @@ const escapeHtml = (value) =>
     .replace(/'/g, "&#039;");
 
 let categories = readStoredData("bhawaniCategories", defaultCategories);
-let prices = readStoredData("bhawaniPrices", defaultPrices);
+let prices = { ...defaultPrices, ...readStoredData("bhawaniPrices", defaultPrices) };
 let jewelleryItems = readStoredData("bhawaniJewellery", defaultJewellery);
 let staffMembers = readStoredData("bhawaniStaff", defaultStaff);
 let adminUsers = readStoredData("bhawaniAdminUsers", []);
 let activeCategory = "All";
 let activeSearch = "";
-codex/design-website-for-jewellery-store-bkhjok
-=======
-let activeCategory = "All";
- main
+
+const getGold22PerGram = () => Number(prices.gold22Per10Gram || prices.gold22 * 10 || defaultPrices.gold22Per10Gram) / 10;
+const getGold24PerGram = () => Number(prices.gold24Per10Gram || prices.gold24 * 10 || defaultPrices.gold24Per10Gram) / 10;
+const getSilverPerGram = () => Number(prices.silverPerKg || prices.silver * 1000 || defaultPrices.silverPerKg) / 1000;
+
+const getMetalRate = (metal) => {
+  if (metal === "gold24") return getGold24PerGram();
+  if (metal === "silver") return getSilverPerGram();
+  return getGold22PerGram();
+};
+
+const getMetalLabel = (metal) => {
+  if (metal === "gold24") return "24K Gold";
+  if (metal === "silver") return "Silver";
+  return "22K Gold";
+};
 
 const closeMobileMenu = () => {
   navToggle?.setAttribute("aria-expanded", "false");
@@ -139,32 +149,9 @@ const closeMobileMenu = () => {
   document.body.classList.remove("menu-open");
 };
 
-navToggle?.addEventListener("click", () => {
-  const isOpen = navToggle.getAttribute("aria-expanded") === "true";
-  navToggle.setAttribute("aria-expanded", String(!isOpen));
-  navLinks?.classList.toggle("is-open");
-  document.body.classList.toggle("menu-open");
-});
-
-navLinks?.addEventListener("click", (event) => {
-  if (event.target instanceof HTMLAnchorElement) {
-codex/design-website-for-jewellery-store-bkhjok
-=======
-    const targetPanel = event.target.hash.replace("#", "");
-    if (["gold-prices", "gallery", "contact", "admin-panel"].includes(targetPanel)) {
-      showTab(targetPanel);
-    }
- main
-    closeMobileMenu();
-  }
-});
-
 const showTab = (panelId) => {
- codex/design-website-for-jewellery-store-bkhjok
   if (!tabPanelIds.includes(panelId)) return;
 
-=======
-  main
   tabButtons.forEach((button) => {
     const isSelected = button.getAttribute("aria-controls") === panelId;
     button.classList.toggle("is-active", isSelected);
@@ -178,6 +165,17 @@ const showTab = (panelId) => {
   });
 };
 
+const showTabFromHash = (hash) => showTab(hash.replace("#", ""));
+
+navToggle?.addEventListener("click", () => {
+  const isOpen = navToggle.getAttribute("aria-expanded") === "true";
+  navToggle.setAttribute("aria-expanded", String(!isOpen));
+  navLinks?.classList.toggle("is-open");
+  document.body.classList.toggle("menu-open");
+});
+
+navLinks?.addEventListener("click", closeMobileMenu);
+
 tabButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const panelId = button.getAttribute("aria-controls");
@@ -188,57 +186,33 @@ tabButtons.forEach((button) => {
   });
 });
 
-codex/design-website-for-jewellery-store-bkhjok
-c onst showTabFromHash = (hash) => {
-  const panelId = hash.replace("#", "");
-  if (tabPanelIds.includes(panelId)) {
-    showTab(panelId);
-  }
-};
-
 document.addEventListener("click", (event) => {
-  const clickedElement = event.target instanceof Element ? event.target : event.target.parentElement;
+  const clickedElement = event.target instanceof Element ? event.target : event.target?.parentElement;
   const anchor = clickedElement?.closest('a[href^="#"]');
-  if (!anchor) return;
-
-  const panelId = anchor.hash.replace("#", "");
-  if (tabPanelIds.includes(panelId)) {
-    showTab(panelId);
-  }
+  const panelId = anchor?.hash.replace("#", "");
+  if (panelId && tabPanelIds.includes(panelId)) showTab(panelId);
 });
 
 window.addEventListener("hashchange", () => showTabFromHash(window.location.hash));
 showTabFromHash(window.location.hash);
-=======
-const requestedPanel = window.location.hash.replace("#", "");
-if (["gold-prices", "gallery", "contact", "admin-panel"].includes(requestedPanel)) {
-  showTab(requestedPanel);
-}
- main
 
 const renderPrices = () => {
-  if (!priceGrid) return;
+  if (!priceGrid || !priceUpdated) return;
 
-  const gold22 = Number(prices.gold22);
-  const gold24 = Number(prices.gold24);
-  const silver = Number(prices.silver);
-  const tolaInGrams = 11.664;
+  const gold22PerGram = getGold22PerGram();
+  const gold24PerGram = getGold24PerGram();
+  const silverPerGram = getSilverPerGram();
 
   priceUpdated.textContent = `Updated: ${prices.updatedAt}`;
   priceGrid.innerHTML = [
-    ["1 gram 22K", gold22, "22K gold per gram"],
-    ["10 gram 22K", gold22 * 10, "Auto-calculated from 22K per gram"],
-    ["10 gram 24K", gold24 * 10, "Auto-calculated from 24K per gram"],
-    ["1 tola 22K", gold22 * tolaInGrams, "1 tola = 11.664 gram"],
-    ["1 gram silver", silver, "Silver rate for Sindhari"],
- codex/design-website-for-jewellery-store-bkhjok
-=======
-  priceUpdated.textContent = `Updated: ${prices.updatedAt}`;
-  priceGrid.innerHTML = [
-    ["22K Gold", prices.gold22, "Most popular for jewellery"],
-    ["24K Gold", prices.gold24, "Pure gold reference rate"],
-    ["Silver", prices.silver, "Silver rate for Sindhari"],
- main
+    ["Gold 22K • 1 gram", gold22PerGram, "Auto-synced from 10 gram price"],
+    ["Gold 22K • 10 gram", gold22PerGram * 10, "Admin enters this main gold rate"],
+    ["Gold 22K • 1 tola", gold22PerGram * TOLA_IN_GRAMS, "1 tola = 11.664 gram"],
+    ["Gold 24K • 1 gram", gold24PerGram, "Pure gold reference"],
+    ["Gold 24K • 10 gram", gold24PerGram * 10, "Auto-synced display"],
+    ["Silver • 1 gram", silverPerGram, "Auto-synced from 1 kg price"],
+    ["Silver • 1 tola", silverPerGram * TOLA_IN_GRAMS, "1 tola = 11.664 gram"],
+    ["Silver • 1 kg", silverPerGram * 1000, "Admin enters this main silver rate"],
   ]
     .map(
       ([label, value, helpText]) => `
@@ -246,11 +220,6 @@ const renderPrices = () => {
           <span>${label}</span>
           <strong>${formatCurrency(value)}</strong>
           <small>${helpText}</small>
- codex/design-website-for-jewellery-store-bkhjok
-=======
-          <strong>₹${Number(value).toLocaleString("en-IN")}</strong>
-          <small>${helpText} • per gram</small>
- main
         </article>
       `,
     )
@@ -259,17 +228,12 @@ const renderPrices = () => {
 
 const renderCategoryOptions = () => {
   if (!uploadCategory) return;
-
-  uploadCategory.innerHTML = categories
-    .map((category) => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`)
-    .join("");
+  uploadCategory.innerHTML = categories.map((category) => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`).join("");
 };
 
 const renderGalleryFilters = () => {
   if (!galleryFilter) return;
-
-  const filterCategories = ["All", ...categories];
-  galleryFilter.innerHTML = filterCategories
+  galleryFilter.innerHTML = ["All", ...categories]
     .map(
       (category) => `
         <button class="filter-chip ${category === activeCategory ? "is-active" : ""}" type="button" data-category="${escapeHtml(category)}">
@@ -281,59 +245,81 @@ const renderGalleryFilters = () => {
 };
 
 const buildWhatsAppLink = (item) => {
-  const message = `Namaste Bhawani Jewellers, I want to enquire about ${item.name} (${item.category}, ${item.weight}).`;
-  return `https://wa.me/918890599101?text=${encodeURIComponent(message)}`;
+  const message = encodeURIComponent(`Namaste Bhawani Jewellers, I am interested in ${item.name} (${item.category}).`);
+  return `https://wa.me/918890599101?text=${message}`;
 };
 
 const renderGallery = () => {
   if (!galleryGrid) return;
 
-  const searchText = activeSearch.toLowerCase();
-  const visibleItems = jewelleryItems.filter((item) => {
-    const matchesCategory = activeCategory === "All" || item.category === activeCategory;
-    const searchableText = `${item.name} ${item.category} ${item.weight}`.toLowerCase();
-    const matchesSearch = !searchText || searchableText.includes(searchText);
-    return matchesCategory && matchesSearch;
-  });
+  const query = activeSearch.trim().toLowerCase();
+  const filteredItems = jewelleryItems
+    .filter((item) => activeCategory === "All" || item.category === activeCategory)
+    .filter((item) => [item.name, item.category, item.description, item.metal].some((value) => String(value || "").toLowerCase().includes(query)))
+    .sort((first, second) => first.category.localeCompare(second.category) || first.name.localeCompare(second.name));
 
-  if (!visibleItems.length) {
-    galleryGrid.innerHTML = '<div class="empty-state">No jewellery images matched. Try another search or category.</div>';
- codex/design-website-for-jewellery-store-bkhjok
-=======
-const renderGallery = () => {
-  if (!galleryGrid) return;
-
-  const visibleItems = jewelleryItems.filter(
-    (item) => activeCategory === "All" || item.category === activeCategory,
-  );
-
-  if (!visibleItems.length) {
-    galleryGrid.innerHTML = '<div class="empty-state">No jewellery images in this category yet. Admin can upload new items from the Admin Panel tab.</div>';
- main
+  if (!filteredItems.length) {
+    galleryGrid.innerHTML = `<div class="empty-state">No jewellery found. Try another search or category.</div>`;
     return;
   }
 
-  galleryGrid.innerHTML = visibleItems
+  galleryGrid.innerHTML = filteredItems
     .map((item) => {
+      const weightGram = Number(item.weightGram || String(item.weight || "").match(/[\d.]+/)?.[0] || 0);
+      const metal = item.metal || "gold22";
+      const metalValue = weightGram * getMetalRate(metal);
       const imageMarkup = item.image
         ? `<img src="${item.image}" alt="${escapeHtml(item.name)}" />`
-        : `<div class="jewellery-placeholder" aria-hidden="true">${escapeHtml(item.name.charAt(0))}</div>`;
+        : `<div class="gallery-placeholder" aria-hidden="true"><span>${escapeHtml(item.name.slice(0, 2).toUpperCase())}</span></div>`;
 
       return `
-        <article class="jewellery-card">
-          ${imageMarkup}
-          <div class="jewellery-card-content">
-            <span>${escapeHtml(item.category)}</span>
+        <article class="gallery-card">
+          <div class="gallery-image">${imageMarkup}</div>
+          <div class="gallery-card-body">
+            <span class="category-pill">${escapeHtml(item.category)}</span>
             <h3>${escapeHtml(item.name)}</h3>
-            <p>${escapeHtml(item.weight)}</p>
-            <div class="card-actions">
-              <a class="button primary small" href="${buildWhatsAppLink(item)}" target="_blank" rel="noopener">WhatsApp Enquiry</a>
-            </div>
+            <p>${escapeHtml(item.description || "Visit the store for final design, making charges, and availability.")}</p>
+            <dl class="item-meta">
+              <div><dt>Metal</dt><dd>${getMetalLabel(metal)}</dd></div>
+              <div><dt>Weight</dt><dd>${formatWeight(weightGram)} / ${formatTola(weightGram)}</dd></div>
+              <div><dt>Metal value</dt><dd>${formatCurrency(metalValue)}</dd></div>
+            </dl>
+            <a class="text-link" href="${buildWhatsAppLink(item)}">Ask on WhatsApp</a>
           </div>
         </article>
       `;
     })
     .join("");
+};
+
+const renderStaffList = () => {
+  if (!staffList) return;
+  staffList.innerHTML = staffMembers
+    .map(
+      (staff, index) => `
+        <div class="management-item">
+          <span><strong>${escapeHtml(staff.name)}</strong> ${escapeHtml(staff.role)} • ${escapeHtml(staff.phone)}</span>
+          <button class="link-button" type="button" data-staff-index="${index}">Remove</button>
+        </div>
+      `,
+    )
+    .join("");
+};
+
+const renderAdminUserList = () => {
+  if (!adminUserList) return;
+  adminUserList.innerHTML = adminUsers.length
+    ? adminUsers
+        .map(
+          (admin, index) => `
+            <div class="management-item">
+              <span><strong>${escapeHtml(admin.username)}</strong> password hidden</span>
+              <button class="link-button" type="button" data-admin-index="${index}">Remove</button>
+            </div>
+          `,
+        )
+        .join("")
+    : `<div class="empty-state compact">No extra admins added yet.</div>`;
 };
 
 const refreshStorefront = () => {
@@ -343,76 +329,54 @@ const refreshStorefront = () => {
   renderGallery();
   renderStaffList();
   renderAdminUserList();
-  calculatePriceBreakup();
-};
-
-const renderStaffList = () => {
-  if (!staffList) return;
-
-  staffList.innerHTML = staffMembers
-    .map(
-      (staff, index) => `
-        <div class="management-item">
-          <span><strong>${escapeHtml(staff.name)}</strong><small>${escapeHtml(staff.role)} • ${escapeHtml(staff.phone)}</small></span>
-          <button class="link-button danger" type="button" data-staff-index="${index}">Remove</button>
-        </div>
-      `,
-    )
-    .join("");
-};
-
-const renderAdminUserList = () => {
-  if (!adminUserList) return;
-
-  adminUserList.innerHTML = adminUsers.length
-    ? adminUsers
-        .map(
-          (admin, index) => `
-            <div class="management-item">
-              <span><strong>${escapeHtml(admin.username)}</strong><small>Additional admin</small></span>
-              <button class="link-button danger" type="button" data-admin-index="${index}">Remove</button>
-            </div>
-          `,
-        )
-        .join("")
-    : '<div class="empty-state compact">No extra admins added yet.</div>';
 };
 
 const calculatePriceBreakup = () => {
   if (!priceBreakupForm || !breakupResult) return;
-
   const formData = new FormData(priceBreakupForm);
-  const purity = formData.get("purity");
+  const purity = String(formData.get("purity"));
   const weight = Number(formData.get("weight"));
-  const makingPerGram = Number(formData.get("making"));
-  const gstPercent = Number(formData.get("gst"));
-  const rate = Number(prices[purity]);
-  const metalValue = rate * weight;
-  const makingValue = makingPerGram * weight;
+  const making = Number(formData.get("making"));
+  const gst = Number(formData.get("gst"));
+  const metalValue = getMetalRate(purity) * weight;
+  const makingValue = making * weight;
   const subtotal = metalValue + makingValue;
-  const gstValue = (subtotal * gstPercent) / 100;
+  const gstValue = subtotal * (gst / 100);
   const total = subtotal + gstValue;
 
-  breakupResult.innerHTML = `
-    <div><span>Metal value</span><strong>${formatCurrency(metalValue)}</strong></div>
-    <div><span>Making charges</span><strong>${formatCurrency(makingValue)}</strong></div>
-    <div><span>GST</span><strong>${formatCurrency(gstValue)}</strong></div>
-    <div><span>Total estimate</span><strong>${formatCurrency(total)}</strong></div>
-  `;
+  breakupResult.innerHTML = [
+    ["Metal value", metalValue],
+    ["Making charges", makingValue],
+    ["GST", gstValue],
+    ["Estimated total", total],
+  ]
+    .map(([label, value]) => `<div><span>${label}</span><strong>${formatCurrency(value)}</strong></div>`)
+    .join("");
 };
 
-galleryFilter?.addEventListener("click", (event) => {
-  const filterButton = event.target.closest(".filter-chip");
-  if (!filterButton) return;
+priceBreakupForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  calculatePriceBreakup();
+});
 
-  activeCategory = filterButton.dataset.category;
+priceBreakupForm?.addEventListener("input", calculatePriceBreakup);
+
+galleryFilter?.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-category]");
+  if (!button) return;
+  activeCategory = button.dataset.category;
   renderGalleryFilters();
   renderGallery();
 });
 
 gallerySearchForm?.addEventListener("submit", (event) => {
   event.preventDefault();
-  activeSearch = jewellerySearchInput.value.trim();
+  activeSearch = jewellerySearchInput.value;
+  renderGallery();
+});
+
+jewellerySearchInput?.addEventListener("input", (event) => {
+  activeSearch = event.target.value;
   renderGallery();
 });
 
@@ -422,58 +386,39 @@ clearSearchButton?.addEventListener("click", () => {
   renderGallery();
 });
 
-priceBreakupForm?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  calculatePriceBreakup();
-});
-
 appointmentForm?.addEventListener("submit", (event) => {
   event.preventDefault();
   const formData = new FormData(appointmentForm);
-  const name = formData.get("name") || "guest";
+  const message = encodeURIComponent(`Appointment request from ${formData.get("name")} (${formData.get("phone")}) for ${formData.get("occasion")}.`);
+  window.open(`https://wa.me/918890599101?text=${message}`, "_blank");
   appointmentForm.reset();
-  appointmentForm.querySelector("button").textContent = `Thank you, ${name}!`;
 });
 
 contactMessageForm?.addEventListener("submit", (event) => {
   event.preventDefault();
-  const submitButton = contactMessageForm.querySelector("button");
+  const formData = new FormData(contactMessageForm);
+  const message = encodeURIComponent(`${formData.get("contactName")} (${formData.get("contactPhone")}): ${formData.get("message")}`);
+  window.open(`https://wa.me/918890599101?text=${message}`, "_blank");
   contactMessageForm.reset();
-  submitButton.textContent = "Message received";
 });
 
 adminLoginForm?.addEventListener("submit", async (event) => {
- codex/design-website-for-jewellery-store-bkhjok
-=======
-adminLoginForm?.addEventListener("submit", (event) => {
-main
   event.preventDefault();
   const formData = new FormData(adminLoginForm);
-  const username = formData.get("username");
-  const password = formData.get("password");
-  const [usernameHash, passwordHash] = await Promise.all([hashText(username), hashText(password)]);
+  const usernameHash = await hashText(String(formData.get("username")).trim());
+  const passwordHash = await hashText(String(formData.get("password")));
   const isDefaultAdmin = usernameHash === ADMIN_USERNAME_HASH && passwordHash === ADMIN_PASSWORD_HASH;
-  const isAdditionalAdmin = adminUsers.some(
-    (admin) => admin.usernameHash === usernameHash && admin.passwordHash === passwordHash,
-  );
+  const isAdditionalAdmin = adminUsers.some((admin) => admin.usernameHash === usernameHash && admin.passwordHash === passwordHash);
   const isAdmin = isDefaultAdmin || isAdditionalAdmin;
- codex/design-website-for-jewellery-store-bkhjok
-=======
-  const isAdmin = usernameHash === ADMIN_USERNAME_HASH && passwordHash === ADMIN_PASSWORD_HASH;
-  const isAdmin = username === ADMIN_USERNAME && password === ADMIN_PASSWORD; main
 
-  adminLoginStatus.textContent = isAdmin
-    ? "Login successful. Admin features are now available."
-    : "Invalid admin username or password.";
+  adminLoginStatus.textContent = isAdmin ? "Login successful. Admin features are now available." : "Invalid admin username or password.";
   adminTools.hidden = !isAdmin;
 
-  if (isAdmin) {
-    adminLoginForm.reset();
-  }
+  if (isAdmin) adminLoginForm.reset();
 });
 
 forgotPasswordButton?.addEventListener("click", () => {
-  adminLoginStatus.textContent = "Password reset is protected. Contact Sawai Ram at +91 63677 08444 to verify identity and create a new admin.";
+  adminLoginStatus.textContent = "For password reset, verify identity with Bhaira Ram or Sawai Ram by phone. Passwords are not displayed publicly.";
 });
 
 adminLogout?.addEventListener("click", () => {
@@ -481,21 +426,18 @@ adminLogout?.addEventListener("click", () => {
   adminLoginStatus.textContent = "Admin logged out.";
 });
 
-goldPriceForm?.addEventListener("submit", (event) => {
+metalPriceForm?.addEventListener("submit", (event) => {
   event.preventDefault();
-  const formData = new FormData(goldPriceForm);
+  const formData = new FormData(metalPriceForm);
   prices = {
-    gold22: Number(formData.get("gold22")),
-    gold24: Number(formData.get("gold24")),
-    silver: Number(formData.get("silver")),
-    updatedAt: new Date().toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-    }),
+    gold22Per10Gram: Number(formData.get("gold22Per10Gram")),
+    gold24Per10Gram: Number(formData.get("gold24Per10Gram")),
+    silverPerKg: Number(formData.get("silverPerKg")),
+    updatedAt: formatDate(),
   };
   writeStoredData("bhawaniPrices", prices);
   renderPrices();
+  renderGallery();
   calculatePriceBreakup();
 });
 
@@ -533,7 +475,6 @@ staffForm?.addEventListener("submit", (event) => {
 staffList?.addEventListener("click", (event) => {
   const removeButton = event.target.closest("[data-staff-index]");
   if (!removeButton) return;
-
   staffMembers = staffMembers.filter((_, index) => index !== Number(removeButton.dataset.staffIndex));
   writeStoredData("bhawaniStaff", staffMembers);
   renderStaffList();
@@ -548,10 +489,7 @@ adminUserForm?.addEventListener("submit", async (event) => {
 
   const usernameHash = await hashText(username);
   const passwordHash = await hashText(password);
-  adminUsers = [
-    ...adminUsers.filter((admin) => admin.usernameHash !== usernameHash),
-    { username, usernameHash, passwordHash },
-  ];
+  adminUsers = [...adminUsers.filter((admin) => admin.usernameHash !== usernameHash), { username, usernameHash, passwordHash }];
   writeStoredData("bhawaniAdminUsers", adminUsers);
   adminUserForm.reset();
   renderAdminUserList();
@@ -560,7 +498,6 @@ adminUserForm?.addEventListener("submit", async (event) => {
 adminUserList?.addEventListener("click", (event) => {
   const removeButton = event.target.closest("[data-admin-index]");
   if (!removeButton) return;
-
   adminUsers = adminUsers.filter((_, index) => index !== Number(removeButton.dataset.adminIndex));
   writeStoredData("bhawaniAdminUsers", adminUsers);
   renderAdminUserList();
@@ -581,26 +518,27 @@ uploadForm?.addEventListener("submit", (event) => {
     const newItem = {
       name: String(formData.get("itemName")),
       category: String(formData.get("itemCategory")),
-      weight: String(formData.get("itemWeight")),
+      description: String(formData.get("itemDescription")),
+      metal: String(formData.get("itemMetal")),
+      weightGram: Number(formData.get("itemWeightGram")),
       image: String(reader.result),
     };
 
-    jewelleryItems = [...jewelleryItems, newItem].sort((first, second) =>
-      first.category.localeCompare(second.category),
-    );
+    jewelleryItems = [...jewelleryItems, newItem].sort((first, second) => first.category.localeCompare(second.category) || first.name.localeCompare(second.name));
     writeStoredData("bhawaniJewellery", jewelleryItems);
     activeCategory = newItem.category;
     refreshStorefront();
     uploadForm.reset();
-    uploadStatus.textContent = `${newItem.name} uploaded and arranged under ${newItem.category}.`;
+    uploadStatus.textContent = `${newItem.name} uploaded under ${newItem.category}. Weight and price are auto displayed.`;
   });
   reader.readAsDataURL(imageFile);
 });
 
-if (goldPriceForm) {
-  goldPriceForm.elements.gold22.value = prices.gold22;
-  goldPriceForm.elements.gold24.value = prices.gold24;
-  goldPriceForm.elements.silver.value = prices.silver;
+if (metalPriceForm) {
+  metalPriceForm.elements.gold22Per10Gram.value = prices.gold22Per10Gram || getGold22PerGram() * 10;
+  metalPriceForm.elements.gold24Per10Gram.value = prices.gold24Per10Gram || getGold24PerGram() * 10;
+  metalPriceForm.elements.silverPerKg.value = prices.silverPerKg || getSilverPerGram() * 1000;
 }
 
 refreshStorefront();
+calculatePriceBreakup();
